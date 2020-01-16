@@ -40,6 +40,9 @@ class LogEntry:
 
 
         if string != None:
+            variable = re.findall(r"against variable.*\[file", string)
+            if len(variable) > 0:
+                self.__dict__["variable"] = variable[0][17:len(variable[0])-5]
             a = re.findall(r"\[[^\]]+]", string)
             for i in a:
                 b = re.findall(r"\[([^ ]+) \"?(.*)\"?\]$", i)
@@ -50,7 +53,7 @@ class LogEntry:
                     if (b[0] == "tag"):
                         self.tags.append(b[1])
                     else:
-                        self.__dict__[b[0]] = b[1]
+                        self.__dict__[b[0]] = b[1][:-1]
 
     def __repr__(self):
         return str(self.id) + ": " + str(self.msg)
